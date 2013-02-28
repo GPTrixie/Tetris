@@ -1,2 +1,1 @@
-Tetris //super tetris
-======
+Projet Tetris en C Dièse.
