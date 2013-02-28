@@ -20,8 +20,8 @@ namespace Tetris
             temp = 0;
             niveau = 0;
             this.musique = musique;
-            puit = new espace(22,11); // taille de l'écrand de jeux
-            pieceSuivante = new espace(4,4); // taille des carré des pieces
+            puit = new espace(22 , 10); // taille de l'écran de jeux
+            pieceSuivante = new espace(4 , 4); // taille des carrés des pieces
 
         }
         public int Score

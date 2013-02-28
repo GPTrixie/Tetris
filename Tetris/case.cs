@@ -7,20 +7,21 @@ namespace Tetris
 {
     class @case
     {
-        private Boolean pleine;
+        private int pleine;
         private int x;
         private int y;
 
 
         public @case() { }
-        public @case(int x,int y) {
-            pleine = false;
+
+        public @case(int x,int y) 
+        {
+            pleine = 0;
             this.x=x;
             this.y=y;
-
         }
 
-        public Boolean Pleine
+        public int Pleine
         {
             get{return pleine;}
             set{this.pleine = value;}
@@ -35,5 +36,7 @@ namespace Tetris
             get { return y; }
             set { this.y = value; }
         }
+
+
     }
 }

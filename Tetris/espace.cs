@@ -12,11 +12,16 @@ namespace Tetris
         private piece pieceEnCour;
         private @case[][] tableau;
 
+
+        public espace() { }
+
         public espace(int hauteur,int largeur)
         {
             this.largeur = largeur;
             this.hauteur = hauteur;
             pieceEnCour = new piece(); //peut etre pas utile
+
+
             tableau = new @case[largeur][];
             for (int i = 0; i < largeur; i++)
             {
@@ -40,7 +45,7 @@ namespace Tetris
             set { this.largeur = value; }
         }
 
-        public Boolean getCase(int x, int y)
+        public int getCase(int x, int y)
         {
 
             return tableau[x][y].Pleine;
