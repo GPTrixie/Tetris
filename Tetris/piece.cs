@@ -13,10 +13,9 @@ namespace Tetris
         private int type;
 
         public piece() { }
-        public piece(int type,int x,int y)// mettre des coordonnées pour le centre cette fct sert de chargement de piece
+        public piece(int type, int x, int y)// mettre des coordonnées pour le centre cette fct sert de chargement de piece
         {
             String temp;
-
 
             try
             {
@@ -29,12 +28,13 @@ namespace Tetris
                     tableau[i] = new @case[4];
 
                     temp = infile.ReadLine();
-             
+
 
                     for (int j = 0; j < 4; j++)
                     {
+
                         tableau[i][j] = new @case(i, j);
-                        tableau[i][j].Pleine = (int)temp[2*j];
+                        tableau[i][j].Pleine = (int)char.GetNumericValue((char)temp[2 * j]);
                     }
                 }
 
@@ -43,9 +43,12 @@ namespace Tetris
                 this.type = type;
                 this.centre = new @case(x, y);
             }
-            catch (IOException e) { }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
-        
+
         }
 
         public int Type
@@ -59,29 +62,84 @@ namespace Tetris
 
 
         }
-       public void rotationPiece(int sens) // Le centre de rotation est toujours (2,1), et on rotate dans le sens trigo
-       {
-           if (this.type == 2) // Si c'est la barre, qu'on traite à part
-           {
-               if( elle est ----)
-               {
-                   on la Met |
-               }
-                   else
-               {
-                   on la Met ----
-               }
-           }
-           else // on fait les bourrins y'a que 9 cas.
-           {
-               int temp
-               tableau[1][1].Pleine = temp;      
-           }
+
+        public void rotationPiece(int sens) // Le centre de rotation est toujours (2,1), et on rotate dans le sens trigo
+        {
+            if (this.type == 2) // Si c'est la barre, qu'on traite à part
+            {
+                if (tableau[0][0].Pleine == 1)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (j == 1)
+                            {
+                                tableau[i][j].Pleine = 1;
+
+                            }
+                            else
+                            {
+                                tableau[i][j].Pleine = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (i == 0)
+                            {
+                                tableau[i][j].Pleine = 1;
+
+                            }
+                            else
+                            {
+                                tableau[i][j].Pleine = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            else // on fait les bourrins y'a que 9 cas.
+            {
+                int temp;
+                if (sens == 1)
+                {
+                    temp = tableau[0][1].Pleine;
+                    tableau[0][1].Pleine = tableau[0][3].Pleine;
+                    tableau[0][3].Pleine = tableau[2][3].Pleine;
+                    tableau[2][3].Pleine = tableau[2][1].Pleine;
+                    tableau[2][1].Pleine = temp;
+                    temp = tableau[0][2].Pleine;
+                    tableau[0][2].Pleine = tableau[1][3].Pleine;
+                    tableau[1][3].Pleine = tableau[2][2].Pleine;
+                    tableau[2][2].Pleine = tableau[1][1].Pleine;
+                    tableau[1][1].Pleine = temp;
+                }
+                else
+                {
+                    temp = tableau[0][1].Pleine;
+                    tableau[0][1].Pleine = tableau[2][1].Pleine;
+                    tableau[2][1].Pleine = tableau[2][3].Pleine;
+                    tableau[2][3].Pleine = tableau[0][3].Pleine;
+                    tableau[0][3].Pleine = temp;
+                    temp = tableau[0][2].Pleine;
+                    tableau[0][2].Pleine = tableau[1][1].Pleine;
+                    tableau[1][1].Pleine = tableau[2][2].Pleine;
+                    tableau[2][2].Pleine = tableau[1][3].Pleine;
+                    tableau[1][3].Pleine = temp;
+
+                }
+            }
 
 
 
-       }
-
+        }
 
         public void afficherTest()
         {
