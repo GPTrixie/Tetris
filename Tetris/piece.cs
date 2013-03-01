@@ -13,7 +13,7 @@ namespace Tetris
         private int type;
 
         public piece() { }
-        public piece(int type, int x, int y)// mettre des coordonnées pour le centre cette fct sert de chargement de piece
+        public piece(int x, int y, int type)// mettre des coordonnées pour le centre cette fct sert de chargement de piece
         {
             String temp;
 
@@ -56,13 +56,18 @@ namespace Tetris
             get { return type; }
             set { this.type = value; }
         }
-
-        void deplacerPiece(@case centreBis)
+        public void setCentre(@case centre)
         {
-
-
+            this.centre = centre;
         }
-
+        public @case getCentre()
+        {
+            return centre;
+        }
+        public @case[][] getTableau()
+        {
+            return tableau;
+        }
         public void rotationPiece(int sens) // Le centre de rotation est toujours (2,1), et on rotate dans le sens trigo
         {
             if (this.type == 2) // Si c'est la barre, qu'on traite à part

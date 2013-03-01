@@ -15,7 +15,7 @@ namespace Tetris
 
         public espace() { }
 
-        public espace(int hauteur,int largeur)
+        public espace(int hauteur, int largeur)
         {
             this.largeur = largeur;
             this.hauteur = hauteur;
@@ -31,7 +31,7 @@ namespace Tetris
                     tableau[i][j] = new @case(i, j);
                 }
             }
-   
+
         }
 
         public int Hauteur
@@ -51,9 +51,50 @@ namespace Tetris
             return tableau[x][y].Pleine;
 
         }
-        public void setPieceEncour(int x, int y , int type)
+        public void setPieceEncour(int x, int y, int type)
         {
-            pieceEnCour=new piece(x,y,type);
+            pieceEnCour = new piece(x, y, type);
+        }
+        public piece getPieceEncour()
+        {
+            return pieceEnCour;
+        }
+
+        public void placerPiece()
+        {
+            @case[][] temp = pieceEnCour.getTableau();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (temp[i][j].Pleine == 1)
+                    {
+                        tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine = 1;
+                    }
+                }
+            }
+
+        }
+        public void supprimerPiece()
+        {
+            @case[][] temp = pieceEnCour.getTableau();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (temp[i][j].Pleine == 1)
+                    {
+                        tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine = 0;
+                    }
+                }
+            }
+
+        }
+        public void deplacerPiece(@case centre)
+        {
+            this.supprimerPiece();
+            pieceEnCour.setCentre(centre);
+            this.placerPiece();
         }
         public void destructionLigne(int x)
         {
@@ -64,6 +105,17 @@ namespace Tetris
         {
 
 
+        }
+        public void afficherTest()
+        {
+            for (int i = 0; i < largeur; i++)
+            {
+                for (int j = 0; j < hauteur; j++)
+                {
+                    Console.Write(tableau[i][j].Pleine);
+                }
+                Console.WriteLine(" ");
+            }
         }
     }
 }
