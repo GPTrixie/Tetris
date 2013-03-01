@@ -22,11 +22,11 @@ namespace Tetris
             pieceEnCour = new piece(); //peut etre pas utile
 
 
-            tableau = new @case[largeur][];
-            for (int i = 0; i < largeur; i++)
+            tableau = new @case[hauteur][];
+            for (int i = 0; i < hauteur; i++)
             {
-                tableau[i] = new @case[hauteur];
-                for (int j = 0; j < hauteur; j++)
+                tableau[i] = new @case[largeur];
+                for (int j = 0; j < largeur; j++)
                 {
                     tableau[i][j] = new @case(i, j);
                 }
@@ -90,27 +90,43 @@ namespace Tetris
             }
 
         }
-        public void deplacerPiece(@case centre)
+        public void deplacerPiece(int x, int y)
         {
+            @case centre = new @case(x + pieceEnCour.getCentre().X, y + pieceEnCour.getCentre().Y);
             this.supprimerPiece();
             pieceEnCour.setCentre(centre);
             this.placerPiece();
         }
+        public void rotationPiece(int sens)
+        {
+            this.supprimerPiece();
+            pieceEnCour.rotationPiece(sens);
+            this.placerPiece();
+        }
         public void destructionLigne(int x)
         {
-
+            for (int j = 0; j < largeur; j++)
+            {
+                tableau[x][j].Pleine = 0;
+            }
 
         }
-        public void testDinligne(int x)
+        public Boolean testFinligne(int x)
         {
-
-
+            for (int j = 0; j < hauteur; j++)
+            {
+                if (tableau[x][j].Pleine == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public void afficherTest()
         {
-            for (int i = 0; i < largeur; i++)
+            for (int i = 0; i < hauteur; i++)
             {
-                for (int j = 0; j < hauteur; j++)
+                for (int j = 0; j < largeur; j++)
                 {
                     Console.Write(tableau[i][j].Pleine);
                 }
