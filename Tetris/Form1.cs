@@ -14,6 +14,18 @@ namespace Tetris
         public Form1()
         {
             InitializeComponent();
+
         }
+
+        private void start_Click(object sender, EventArgs e)
+        {
+            Tetris test =new  Tetris();
+            this.Hide();
+            test.Show();
+            test.Jouer(12);
+            
+        }
+
+        
     }
 }

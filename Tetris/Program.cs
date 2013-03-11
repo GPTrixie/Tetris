@@ -17,8 +17,7 @@ namespace Tetris
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            piece RogerRoger = new piece(1, 4, 5);
-            RogerRoger.afficherTest();
+            Application.Exit();
         }
     }
 }

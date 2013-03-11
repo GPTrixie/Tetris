@@ -64,6 +64,10 @@ namespace Tetris
         {
             return centre;
         }
+        public int getType()
+        {
+            return type;
+        }
         public @case[][] getTableau()
         {
             return tableau;
@@ -146,17 +150,7 @@ namespace Tetris
 
         }
 
-        public void afficherTest()
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    Console.Write(tableau[i][j].Pleine);
-                }
-                Console.WriteLine(" ");
-            }
-        }
+       
 
     }
 }

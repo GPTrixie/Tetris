@@ -51,9 +51,9 @@ namespace Tetris
             return tableau[x][y].Pleine;
 
         }
-        public void setPieceEncour(int x, int y, int type)
+        public void setPieceEncour(piece pieceEnCour)
         {
-            pieceEnCour = new piece(x, y, type);
+            this.pieceEnCour = pieceEnCour;
         }
         public piece getPieceEncour()
         {
@@ -199,7 +199,7 @@ namespace Tetris
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        if (i == 4)
+                        if (i == 3)
                         {
                             if (temp[i][j].Pleine == 1)
                             {
@@ -222,7 +222,7 @@ namespace Tetris
                         {
                             if (temp[i][j].Pleine == 1 && temp[i + 1][j].Pleine != 1)
                             {
-                                if (j + pieceEnCour.getCentre().Y != hauteur - 1)
+                                if (i + pieceEnCour.getCentre().X < hauteur-1)
                                 {
                                     if (tableau[i + pieceEnCour.getCentre().X + 1][j + pieceEnCour.getCentre().Y].Pleine == 1)
                                     {
@@ -247,9 +247,30 @@ namespace Tetris
 
         }
 
+        public int testRotation(int sens)
+        {
+
+            piece tempPiece =new piece(pieceEnCour.getCentre().X,pieceEnCour.getCentre().Y,pieceEnCour.getType());
+            @case[][] temp2 = pieceEnCour.getTableau();
+            tempPiece.rotationPiece(sens);
+
+            @case[][] temp = tempPiece.getTableau();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (temp[i][j].Pleine == 1 && temp2[i][j].Pleine != 1 && tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine == 1)
+                    {
+                        return 0;
+                    }
+                }
+            }
+            return sens;
+        }
 
         public void deplacerPiece(int x, int y)
         {
+            //probleme avec le bas 
             @case centre = new @case(x + pieceEnCour.getCentre().X, y + pieceEnCour.getCentre().Y);
             this.supprimerPiece();
             pieceEnCour.setCentre(centre);
@@ -257,11 +278,11 @@ namespace Tetris
         }
         public void rotationPiece(int sens)
         {
-            this.supprimerPiece();
+           this.supprimerPiece();
             pieceEnCour.rotationPiece(sens);
             this.placerPiece();
         }
-        public void destructionLigne(int x)
+        public void destructionLigne(int x) // peut etre pas utile 
         {
             for (int j = 0; j < largeur; j++)
             {
@@ -271,7 +292,7 @@ namespace Tetris
         }
         public Boolean testFinligne(int x)
         {
-            for (int j = 0; j < hauteur; j++)
+            for (int j = 0; j < largeur; j++)
             {
                 if (tableau[x][j].Pleine == 0)
                 {
@@ -280,16 +301,29 @@ namespace Tetris
             }
             return true;
         }
-        public void afficherTest()
+        public Boolean testLigneVide(int x)
         {
-            for (int i = 0; i < hauteur; i++)
+            for (int j = 0; j < largeur; j++)
             {
-                for (int j = 0; j < largeur; j++)
+                if (tableau[x][j].Pleine == 1)
                 {
-                    Console.Write(tableau[i][j].Pleine);
+                    return false;
                 }
-                Console.WriteLine(" ");
+            }
+            return true;
+        }
+        public void descendrePiece(int ligne)
+        {
+            while (testLigneVide(ligne+1) == false &&  ligne >0)
+            {
+                for (int i = 0; i < largeur; i++)
+                {
+                    tableau[ligne][i] = tableau[ligne - 1][i];
+                }
+                ligne--;
             }
         }
     }
+
+
 }
