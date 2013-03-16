@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 
 namespace Tetris
-{
+{ /**
+     *  <summary> Classe case comprenant les coordonnées,la couleur et si elle est pleine
+     *  </summary>
+     * 
+     * */
     class espace
     {
         private int hauteur;
@@ -45,10 +49,16 @@ namespace Tetris
             set { this.largeur = value; }
         }
 
-        public int getCase(int x, int y)
+        public int getCase(int x, int y) //pleine
         {
 
             return tableau[x][y].Pleine;
+
+        }
+        public int getCaseColor(int x, int y)//couleur
+        {
+
+            return tableau[x][y].Color;
 
         }
         public void setPieceEncour(piece pieceEnCour)
@@ -70,6 +80,7 @@ namespace Tetris
                     if (temp[i][j].Pleine == 1)
                     {
                         tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine = 1;
+                        tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Color = pieceEnCour.Type;
                     }
                 }
             }
@@ -78,13 +89,17 @@ namespace Tetris
         public void supprimerPiece()
         {
             @case[][] temp = pieceEnCour.getTableau();
+             int A = pieceEnCour.getCentre().X;
+             int B = pieceEnCour.getCentre().Y;
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     if (temp[i][j].Pleine == 1)
                     {
-                        tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine = 0;
+                       
+                        tableau[i + A][j + B].Pleine = 0;
+                        tableau[i + A][j + B].Color = 0;
                     }
                 }
             }
@@ -250,19 +265,30 @@ namespace Tetris
         public int testRotation(int sens)
         {
 
-            piece tempPiece =new piece(pieceEnCour.getCentre().X,pieceEnCour.getCentre().Y,pieceEnCour.getType());
-            @case[][] temp2 = pieceEnCour.getTableau();
-            tempPiece.rotationPiece(sens);
 
+            if (pieceEnCour.Type == 2)
+            {
+                if( pieceEnCour.getCentre().Y >largeur -3)
+                  return 0;
+
+            }
+            piece tempPiece =new piece(pieceEnCour.getCentre().X,pieceEnCour.getCentre().Y,pieceEnCour.Type);
+            @case[][] temp2 = pieceEnCour.getTableau();
+
+            
+
+            tempPiece.rotationPiece(sens);
+            
             @case[][] temp = tempPiece.getTableau();
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (temp[i][j].Pleine == 1 && temp2[i][j].Pleine != 1 && tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine == 1)
-                    {
-                        return 0;
-                    }
+                    
+                        if (temp[i][j].Pleine == 1 && temp2[i][j].Pleine != 1 && tableau[i + pieceEnCour.getCentre().X][j + pieceEnCour.getCentre().Y].Pleine == 1)
+                        {
+                            return 0;
+                        }
                 }
             }
             return sens;
@@ -280,13 +306,14 @@ namespace Tetris
         {
            this.supprimerPiece();
             pieceEnCour.rotationPiece(sens);
-            this.placerPiece();
+           this.placerPiece();
         }
         public void destructionLigne(int x) // peut etre pas utile 
         {
             for (int j = 0; j < largeur; j++)
             {
                 tableau[x][j].Pleine = 0;
+                tableau[x][j].Color = 0;
             }
 
         }
@@ -314,14 +341,38 @@ namespace Tetris
         }
         public void descendrePiece(int ligne)
         {
-            while (testLigneVide(ligne+1) == false &&  ligne >0)
+            int j = ligne;
+            while (testLigneVide(j) == false &&  j >-1)
             {
                 for (int i = 0; i < largeur; i++)
                 {
-                    tableau[ligne][i] = tableau[ligne - 1][i];
+                    tableau[j][i].Pleine = tableau[j - 1][i].Pleine;
+                    tableau[j][i].Color = tableau[j - 1][i].Color;
                 }
-                ligne--;
+                j--;
             }
+
+            for (int i = 0; i < largeur; i++)
+            {
+                tableau[j][i].Pleine = 0;
+            }
+        }
+
+        public int testFinJeux()
+        {
+
+            @case[][] temp = pieceEnCour.getTableau();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (temp[i][j].Pleine == 1 && tableau[i][j].Pleine == 1)
+                    {
+                        return 1;
+                    }
+                }
+            }
+            return 0;
         }
     }
 
