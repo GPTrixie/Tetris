@@ -22,16 +22,20 @@ namespace Tetris
         *  </summary>
         * 
         * */
-        public gameOver(int score)
+        public gameOver(int score,int niveau)
         {
             InitializeComponent();
             label2.Text = "Score : " + score;
+            label3.Text = "Niveau : " + niveau;
+            
         }
 
         private void gameOver_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
         }
+
+       
 
        
     }

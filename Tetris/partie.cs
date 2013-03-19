@@ -20,7 +20,7 @@ namespace Tetris
     {
         private int score;
         private int niveau;
-        private int temp; // en seconde ? 
+        private int nbrLigne;
         private int musique;
         private espace pieceSuivante;
         private espace puit;
@@ -28,7 +28,7 @@ namespace Tetris
         public partie(int musique,int niveau)
         {
             score = 0;
-            temp = 0;
+            nbrLigne = 0;
             this.niveau = niveau;
             this.musique = musique;
             puit = new espace(22, 10); // taille de l'écran de jeux
@@ -41,20 +41,36 @@ namespace Tetris
             get { return score; }
             set { this.score = value; }
         }
+        /**
+    *  <summary> Niveau permet de définir le niveau où est le jouer, la vitesse augemente proportionellement au niveau(-40*niveau ms)
+    *  </summary>
+    * 
+    * */
         public int Niveau
         {
             get { return niveau; }
             set { this.niveau = value; }
         }
+        /**
+    *  <summary> Musique définie quel musique est jouer pendant la partie sachant qu'il y a que 3 musique.
+    *  </summary>
+    * 
+    * */
         public int Musique
         {
             get { return musique; }
             set { this.musique = value; }
         }
-        public int Temp
+
+        /**
+    *  <summary>So useless for now.
+    *  </summary>
+    * 
+    * */
+        public int NbrLigne
         {
-            get { return temp; }
-            set { this.temp = value; }
+            get { return nbrLigne; }
+            set { this.nbrLigne = value; }
         }
         public piece randPiece(Random rndNumber)
         {
@@ -74,8 +90,8 @@ namespace Tetris
         public void start()
         {
             Random rndNumber = new Random();
-            puit.setPieceEncour(randPiece(rndNumber));
-            pieceSuivante.setPieceEncour(randPiece(rndNumber));
+            puit.setPieceEnCour(randPiece(rndNumber));
+            pieceSuivante.setPieceEnCour(randPiece(rndNumber));
             puit.placerPiece();
             pieceSuivante.placerPiece();
 
@@ -117,13 +133,13 @@ namespace Tetris
     
 
                         }
-                        graphicsObj.FillRectangle(myBrush, new Rectangle(402+i*20, 12+j*20, 20, 20));
-                        graphicsObj.DrawRectangle(myPen, new Rectangle(402 + i * 20, 12 + j * 20, 20, 20));
+                        graphicsObj.FillRectangle(myBrush, new Rectangle(400+i*20, 10+j*20, 20, 20));
+                        graphicsObj.DrawRectangle(myPen, new Rectangle(400 + i * 20, 10 + j * 20, 20, 20));
                     
                     }
                     else
                     {
-                        graphicsObj.FillRectangle(myBrush2, new Rectangle(402 + i * 20, 12 + j * 20, 20, 20));
+                        graphicsObj.FillRectangle(myBrush2, new Rectangle(400 + i * 20, 10 + j * 20, 20, 20));
                     }
                 }
             }
@@ -163,13 +179,13 @@ namespace Tetris
 
 
                         }
-                        graphicsObj.FillRectangle(myBrush, new Rectangle(12 + j * 20, 12 + i * 20, 20, 20));
-                        graphicsObj.DrawRectangle(myPen, new Rectangle(12 + j * 20, 12 + i * 20, 20, 20));
+                        graphicsObj.FillRectangle(myBrush, new Rectangle(10 + j * 20, 10 + i * 20, 20, 20));
+                        graphicsObj.DrawRectangle(myPen, new Rectangle(10 + j * 20, 10 + i * 20, 20, 20));
                     
                     }
                     else
                     {
-                        graphicsObj.FillRectangle(myBrush2, new Rectangle(12 + j * 20, 12 + i * 20, 20, 20));
+                        graphicsObj.FillRectangle(myBrush2, new Rectangle(10 + j * 20, 10 + i * 20, 20, 20));
                     }
                 }
             }
@@ -192,10 +208,10 @@ namespace Tetris
                 
                 timer1.Interval = 1000 - niveau*80; //changer par rapport a la vitesse
                 placementPiece();
-                puit.setPieceEncour(pieceSuivante.getPieceEncour());
+                puit.setPieceEnCour(pieceSuivante.getPieceEncour());
                 Random rndNumber = new Random();
                 pieceSuivante.supprimerPiece();
-                pieceSuivante.setPieceEncour(randPiece(rndNumber));
+                pieceSuivante.setPieceEnCour(randPiece(rndNumber));
                 puit.placerPiece();
                 pieceSuivante.placerPiece();
                 return 0;
@@ -254,13 +270,25 @@ namespace Tetris
                 }
                 i--;
             }
-            if (compteur != 0)
-            {
-                score += 10 * niveau*compteur;
-               while (score > 10 * niveau * 4)
+
+                switch (compteur)
                 {
-                    niveau++;
+                    case 1: score += 40*(niveau+1);
+                        nbrLigne++;
+                        break;
+                    case 2: score += 100 * (niveau + 1);
+                        nbrLigne += 2;
+                        break;
+                    case 3: score += 300 * (niveau + 1);
+                        nbrLigne += 3;
+                        break;
+                    case 4: score += 1200 * (niveau + 1);
+                        nbrLigne += 4;
+                        break;
                 }
+           while(score >1000*niveau)
+            {
+                niveau++;
             }
             }
 

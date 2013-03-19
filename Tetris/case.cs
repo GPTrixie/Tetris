@@ -6,7 +6,7 @@ using System.Text;
 namespace Tetris
 {
     /**
-     *  <summary> La classe case définie si un carré remplit ou pas à des certaines coordonés
+     *  <summary> La classe case définie si un carré est remplit ou pas à des certaines coordonés
      *  </summary>
      * 
      * */

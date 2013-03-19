@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tetris
 { /**
-     *  <summary> Classe case comprenant les coordonnées,la couleur et si elle est pleine
+     *  <summary> Classe espace corespont à l'endroit ou il y aura l'espace de jeux ou l'espace ou on affichera la prochaine pièce 
      *  </summary>
      * 
      * */
@@ -16,9 +16,18 @@ namespace Tetris
         private piece pieceEnCour;
         private @case[][] tableau;
 
-
+        /**
+     *  <summary> Constructeur par défauts
+     *  </summary>
+     * 
+     * */
         public espace() { }
-
+        /**
+     *  <summary> Constructeur qui définie un espace par sa hauteur et sa largeur et alloue la mémoire du tableau de case en fonction.
+         *  Le tableau commence à 0 
+     *  </summary>
+     * 
+     * */
         public espace(int hauteur, int largeur)
         {
             this.largeur = largeur;
@@ -37,39 +46,80 @@ namespace Tetris
             }
 
         }
-
+        /**
+     *  <summary> Hauteur est le nombre de case verticalement de l'espace
+     *  </summary>
+     * 
+     * */
         public int Hauteur
         {
             get { return hauteur; }
             set { this.hauteur = value; }
         }
+        /**
+     *  <summary> Largeur est le nombre de case horizontalement de l'espace
+     *  </summary>
+     * 
+     * */
         public int Largeur
         {
             get { return largeur; }
             set { this.largeur = value; }
         }
-
-        public int getCase(int x, int y) //pleine
+        /**
+     *  <summary> Fonction qui renvoie la valeur pleine d'une case du tableau.
+     *  </summary>
+          * <param name=x>parametre qui correspont à la position horizontale de la case voulue</param>
+         * <param name=y>parametre qui correspont à la position verticale de la case voulue</param>
+         * <returns>Renvoie un entier corespondant à la valeur Plein de la case (x,y)</returns>
+     * 
+     * */
+        public int getCase(int x, int y) 
         {
 
             return tableau[x][y].Pleine;
 
         }
+        /**
+     *  <summary> Fonction qui renvoie la valeur color d'une case du tableau.
+     *  </summary>
+          * <param name=x>parametre qui correspont à la position horizontale de la case voulue</param>
+         * <param name=y>parametre qui correspont à la position verticale de la case voulue</param>
+         * <returns>Renvoie un entier corespondant à la valeur color de la case (x,y)</returns>
+     * 
+     * */
         public int getCaseColor(int x, int y)//couleur
         {
 
             return tableau[x][y].Color;
 
         }
-        public void setPieceEncour(piece pieceEnCour)
+        /**
+     *  <summary> Méthode qui définie la piece en cours.
+     *  </summary>
+          * <param name=pieceEnCour>parametre qui correspont a la pièce que l'ont veut mettre dans l'espace </param>
+
+     * */
+        public void setPieceEnCour(piece pieceEnCour)
         {
             this.pieceEnCour = pieceEnCour;
         }
+        /**
+     *  <summary> Méthode qui définie la piece en cours.
+     *  </summary>
+     * <returns>Renvoie un type piece corespondant à la piece en cour dans l'espace</returns>
+
+     * */
+
         public piece getPieceEncour()
         {
             return pieceEnCour;
         }
+        /**
+     *  <summary> Méthode qui remplie le tableau de l'espace à l'endroit où  est la pièce.
+     *  </summary>
 
+     * */
         public void placerPiece()
         {
             @case[][] temp = pieceEnCour.getTableau();
@@ -86,6 +136,10 @@ namespace Tetris
             }
 
         }
+        /**
+   *  <summary> Méthode qui supprime la piece dans  le tableau de l'espace à l'endroit où  elle est .
+   *  </summary>
+   * */
         public void supprimerPiece()
         {
             @case[][] temp = pieceEnCour.getTableau();
@@ -105,7 +159,13 @@ namespace Tetris
             }
 
         }
-        public int testDeplacementPiece(int sens) //renvoie l'entier d'entre si possible de bouger autrement envoie 0 (1 droite, 2 gauche 3 bas)
+        /**
+  *  <summary> Méthode qui va test sur le tableau de l'espace si la piece peut se déplacer .
+  *  </summary>
+*    <param name=sens>parametre qui correspont au sens ou l'on veut tester le déplacement(1 droite, 2 gauche 3 bas)  </param>
+ * <returns>Renvoie le sens ou on a test si le déplacement est possible autrement 0 si on peut pas se déplacer</returns>
+         * * */
+        public int testDeplacementPiece(int sens) 
         {
             @case[][] temp = pieceEnCour.getTableau();
             if (sens == 1)
@@ -261,17 +321,18 @@ namespace Tetris
 
 
         }
-
+        /**
+  *  <summary> Méthode qui va test sur le tableau de l'espace si la piece peut faire la rotation dans le sens indiquer .
+  *  </summary>
+*    <param name=sens>parametre qui correspont au sens ou l'on veut faire la rotation (1 droite, 2 gauche )  </param>
+ * <returns>Renvoie le sens ou on a test si la rotation est possible autrement 0 si on peut pas faire la rotation</returns>
+         * * */
         public int testRotation(int sens)
         {
 
-
-            if (pieceEnCour.Type == 2)
-            {
-                if( pieceEnCour.getCentre().Y >largeur -3)
+                if( pieceEnCour.getCentre().Y >largeur -4)
                   return 0;
 
-            }
             piece tempPiece =new piece(pieceEnCour.getCentre().X,pieceEnCour.getCentre().Y,pieceEnCour.Type);
             @case[][] temp2 = pieceEnCour.getTableau();
 
@@ -293,30 +354,34 @@ namespace Tetris
             }
             return sens;
         }
-
+        /**
+  *  <summary> Méthode qui va déplacer la piece en 3 étapes ,la première en supprimant la piece du tableau,la deuxieme en changant le 
+         *  centre de la piece et en 3eme on va placer la piece avec le nouveau centre.
+  *  </summary>
+*    <param name=x>parametre qui correspont au coordonnées horizontale  du centre ou on veut déplacer la pièce</param>
+ *     <param name=y>parametre qui correspont au coordonnées verticale  du centre ou on veut déplacer la pièce</param>
+        * */
         public void deplacerPiece(int x, int y)
         {
-            //probleme avec le bas 
             @case centre = new @case(x + pieceEnCour.getCentre().X, y + pieceEnCour.getCentre().Y);
             this.supprimerPiece();
             pieceEnCour.setCentre(centre);
             this.placerPiece();
         }
+        /**
+  *  <summary> Méthode qui va déplacer la piece en 3 étapes ,la première en supprimant la piece du tableau,la deuxieme en faisant uen rotation à la pièce 
+         *  et en 3eme on va placer la piece avec la rotation effectué.
+  *  </summary>
+*    <param name=sens>parametre qui correspont au sens de la rotation à effectuer</param>
+      * */
+
         public void rotationPiece(int sens)
         {
            this.supprimerPiece();
             pieceEnCour.rotationPiece(sens);
            this.placerPiece();
         }
-        public void destructionLigne(int x) // peut etre pas utile 
-        {
-            for (int j = 0; j < largeur; j++)
-            {
-                tableau[x][j].Pleine = 0;
-                tableau[x][j].Color = 0;
-            }
 
-        }
         public Boolean testFinligne(int x)
         {
             for (int j = 0; j < largeur; j++)

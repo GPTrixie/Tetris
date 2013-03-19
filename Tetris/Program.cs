@@ -5,10 +5,13 @@ using System.Windows.Forms;
 
 namespace Tetris
 {
+    /// <summary>
+    /// La classe programme est la première classe lancé dans le logiciel qui gère les forms au démarache .
+    /// </summary>
     static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Action principal du programme qui lance le form Menu.
         /// </summary>
         [STAThread]
         static void Main()
