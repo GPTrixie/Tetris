@@ -10,14 +10,14 @@ using System.Windows.Forms;
 namespace Tetris
 {
     /**
-    *  <summary> Classe case comprenant les coordonnées,la couleur et si elle est pleine
+    *  <summary>  Classe Menu est une classe héritier de la classe Form qui permet de gérer le menu de Tétris.
     *  </summary>
     * 
     * */
     public partial class Menu : Form
     {
         /**
-    *  <value> Classe case comprenant les coordonnées,la couleur et si elle est pleine
+    *  <value>  Classe Menu est une classe héritier de la classe Form qui permet de gérer le menu de Tétris.
     *  </value>
     * 
     * */
@@ -79,6 +79,50 @@ namespace Tetris
             label1.ForeColor = Color.Black;
             label2.ForeColor = Color.Black;
             label3.ForeColor = Color.Red;
+        }
+
+        private void quitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void rejouerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void typeAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            musique = 1;
+        }
+
+        private void typeBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            musique = 2;
+        }
+
+        private void typeCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            musique = 3;
+        }
+
+        private void oFFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            musique = 0;
+        }
+
+        private void ouvirLaideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.ProcessStartInfo DocumentAide = new System.Diagnostics.ProcessStartInfo(@"doc\aide.pdf", "");
+
+            System.Diagnostics.Process.Start(DocumentAide); 
+        }
+
+        private void scoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            score afficherScore = new score();
+
+            afficherScore.Show();
         }
 
         

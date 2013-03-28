@@ -34,11 +34,7 @@ namespace Tetris
         public piece(int x, int y, int type)// mettre des coordonnées pour le centre cette fct sert de chargement de piece
         {
             String temp;
-
-            try
-            {
-
-                StreamReader infile = File.OpenText("./Pieces/" + type + ".piece");
+            StreamReader infile = File.OpenText("./Pieces/" + type + ".piece");
 
                 tableau = new @case[4][];
                 for (int i = 0; i < 4; i++)
@@ -56,17 +52,9 @@ namespace Tetris
                         tableau[i][j].Color = type;
                     }
                 }
-
-
-
                 this.type = type;
                 this.centre = new @case(x, y);
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
+                infile.Dispose();
 
         }
         /**

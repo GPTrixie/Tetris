@@ -11,7 +11,7 @@ using System.Media;
 namespace Tetris
 {
     /**
-    *  <summary> Classe case comprenant les coordonnées,la couleur et si elle est pleine
+    *  <summary>  Classe Tetris est une classe héritier de la classe Form qui permet de gérer la partie de Tétris.
     *  </summary>
     * 
     * */
@@ -19,6 +19,9 @@ namespace Tetris
     {
         static partie tetris;
         static System.Drawing.Graphics graphicsObj;
+        private int compteur;
+        private Random rndNumber = new Random();
+        private SoundPlayer simpleSound;
 
         public Tetris()
         {
@@ -29,8 +32,7 @@ namespace Tetris
 
         private void Tetris_Load(object sender, EventArgs e)
         {
-            timer1.Start();
-            timer2.Start();
+            timerPrincipale.Start();
         }
         /**
     *  <summary> Fonction principal du jeu qui lance la partie de tétris et qui met les valeur de base.
@@ -43,26 +45,20 @@ namespace Tetris
 
             graphicsObj = this.CreateGraphics();
             tetris = new partie(musique,niveau);
-            timer1.Interval = 1000 - tetris.Niveau * 80;
+            timerPrincipale.Interval = 1000 - tetris.Niveau * 80;
             tetris.start();
-            Pen myPen = new Pen(Color.Black, 2);
-            Rectangle myRectangle = new Rectangle(10, 10, 200, 440);
-            graphicsObj.DrawRectangle(myPen, myRectangle);
-            myRectangle = new Rectangle(400, 10, 80, 80);
-            graphicsObj.DrawRectangle(myPen, myRectangle);
-            
-            tetris.printPiece(graphicsObj);
-            tetris.printPuit(graphicsObj);
-           this.ecrire();
+            tetris.affichage(graphicsObj);
            this.playSimpleSound();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (tetris.deplacerTimer(1, timer1) == 1)
+            int tempNiveau = tetris.Niveau;
+            if (tetris.deplacerTimer(timerPrincipale) == 1)
             {
-                timer1.Enabled = false;
-                
+                timerPrincipale.Enabled = false;
+                simpleSound.SoundLocation = @"./Musique\trololo2.wav";
+                simpleSound.PlayLooping();
                 gameOver fin = new gameOver(tetris.Score,tetris.Niveau);
                 this.Hide();
                 fin.ShowDialog();
@@ -72,77 +68,112 @@ namespace Tetris
             }
             else
             {
-                
-                tetris.printPuit(graphicsObj);
-                tetris.printPiece(graphicsObj);
+                tetris.affichage(graphicsObj);
+                if (tempNiveau < tetris.Niveau)
+                {
+                    compteur = 0;
+                    timerPrincipale.Stop();
+                    simpleSound.SoundLocation = @"./Musique\trololo.wav";
+                    simpleSound.PlayLooping();
+                    timerLevel.Start();
 
-                this.ecrire();
+                }
+                
             }
 
         }
         private void playSimpleSound()
         {
-            switch (tetris.Musique)
+            
+           simpleSound=new SoundPlayer();
+            if (tetris.Musique != 0)
             {
-                case 1: timer1.Interval = 38000;
-                    break;
-                case 2: timer1.Interval = 40000;
-                    break;
-                case 3: timer1.Interval = 98000;
-                    break;
+                simpleSound.SoundLocation = @"./Musique\theme" + tetris.Musique + ".wav";
+                simpleSound.PlayLooping();
             }
-            SoundPlayer simpleSound = new SoundPlayer(@"./Musique\theme" + tetris.Musique + ".wav");
-            simpleSound.Play();
+            else
+            {
+                simpleSound.Stop();
+
+            }
         }
-        private void ecrire()
-        {
-            graphicsObj.DrawRectangle(new Pen(Color.Black, 2), new Rectangle(300, 350, 280, 100));
-            graphicsObj.FillRectangle(new SolidBrush(Color.White), new Rectangle(300, 350, 280, 100));
-            string drawString = "Niveau : " + tetris.Niveau;
-            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 20);
-            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-            graphicsObj.DrawString(drawString, drawFont, drawBrush, 300, 350);
-            drawString = "Score : " + tetris.Score;
-            graphicsObj.DrawString(drawString, drawFont, drawBrush, 300, 380);
-            drawString = "Nombres de ligne : " + tetris.NbrLigne;
-            graphicsObj.DrawString(drawString, drawFont, drawBrush, 300, 410);
-        }
+       
         private void move(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyChar)
+            if (tetris.Bonus == 5)
             {
-                case 'Q':
-                    tetris.deplacerPiece(2);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                case 'q':
-                    tetris.deplacerPiece(2);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                //case (char)52:
-                case 'D':
-                    tetris.deplacerPiece(1);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                case 'd':
-                    tetris.deplacerPiece(1);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                case 'a':
-                    tetris.rotationPiece(1);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                case 'e':
-                    tetris.rotationPiece(2);
-                    tetris.printPuit(graphicsObj);
-                    break;
-                case 's':
-                    if(timer1.Interval == 10)
-                        timer1.Interval=1000 - tetris.Niveau*80;
-                    else
-                    timer1.Interval = 10;
-                    break;
+                switch (e.KeyChar)
+                {
+                    case 'D':
+                        tetris.deplacerPiece(2);
+                        break;
+                    case 'd':
+                        tetris.deplacerPiece(2);
+                        break;
+                    case 'Q':
+                        tetris.deplacerPiece(1);
+                        break;
+                    case 'q':
+                        tetris.deplacerPiece(1);
+                        break;
+                    case 'e':
+                        tetris.rotationPiece(1);
+                        break;
+                    case 'E':
+                        tetris.rotationPiece(1);
+                        break;
+                    case 'a':
+                        tetris.rotationPiece(2);
+                        break;
+                    case 'A':
+                        tetris.rotationPiece(2);
+                        break;
+                    case 's':
+                        if (timerPrincipale.Interval == 10)
+                            timerPrincipale.Interval = 1000 - tetris.Niveau * 80;
+                        else
+                            timerPrincipale.Interval = 10;
+                        break;
+                }
+
             }
+            else
+            {
+                switch (e.KeyChar)
+                {
+                    case 'Q':
+                        tetris.deplacerPiece(2);
+                        break;
+                    case 'q':
+                        tetris.deplacerPiece(2);
+                        break;
+                    case 'D':
+                        tetris.deplacerPiece(1);
+                        break;
+                    case 'd':
+                        tetris.deplacerPiece(1);
+                        break;
+                    case 'a':
+                        tetris.rotationPiece(1);
+                        break;
+                    case 'A':
+                        tetris.rotationPiece(1);
+                        break;
+                    case 'e':
+                        tetris.rotationPiece(2);
+                        break;
+                    case 'E':
+                        tetris.rotationPiece(2);
+                        break;
+                    case 's':
+                        if (timerPrincipale.Interval == 10)
+                            timerPrincipale.Interval = 1000 - tetris.Niveau * 80;
+                        else
+                            timerPrincipale.Interval = 10;
+                        break;
+                }
+            }
+            tetris.affichage(graphicsObj);
         }
 
         private void Tetris_FormClosed(object sender, FormClosedEventArgs e)
@@ -155,6 +186,101 @@ namespace Tetris
         private void timer2_Tick(object sender, EventArgs e)
         {
             this.playSimpleSound();
+        }
+
+        private void quitterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+            
+        }
+
+        private void typeAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tetris.Musique = 1;
+            this.playSimpleSound();
+        }
+
+        private void typeBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tetris.Musique = 2;
+            this.playSimpleSound();
+        }
+
+        private void typeCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tetris.Musique = 3;
+            this.playSimpleSound();
+        }
+
+        private void oFFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tetris.Musique = 0;
+            this.playSimpleSound();
+        }
+
+        private void ouvirLaideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.ProcessStartInfo DocumentAide = new System.Diagnostics.ProcessStartInfo(@"doc\aide.pdf", "");
+
+            System.Diagnostics.Process.Start(DocumentAide); 
+        }
+
+        private void timerLevel_Tick(object sender, EventArgs e)
+        {
+            int temp=rndNumber.Next(6);
+            compteur++;
+            graphicsObj.DrawImage(Image.FromFile("./image/image"+temp+".jpg"), new Rectangle(500, 470, 60, 60), 0, 0, 60, 60, GraphicsUnit.Pixel);
+            if (compteur == 50)
+            {
+               
+                switch(temp)
+                {
+                    case 0:
+                        tetris.bomb(rndNumber.Next(22), rndNumber.Next(10));
+
+                        break;
+                    case 1:
+                        if (timerPrincipale.Interval == 100)
+                        {
+
+                            tetris.Score -= 100;
+                        }
+                        else
+                        {
+                            timerPrincipale.Interval = tetris.Timer - 100;
+                            tetris.Timer = timerPrincipale.Interval;
+                        }
+                    break;
+                    case 2 :
+                        tetris.NbrPiece = tetris.NbrPiece+1;
+                    break;
+                    case 3:
+                        tetris.ajoutLigne(rndNumber.Next(10));
+                    break;
+                    case 4:
+                    timerBonus4.Start();
+                    timerBonus4.Interval = 60000;
+                    break;
+                     }
+                timerLevel.Stop();
+                timerPrincipale.Start();
+                tetris.Bonus = temp;
+                playSimpleSound();
+
+
+            }
+        }
+
+        private void timerBonus4_Tick(object sender, EventArgs e)
+        {
+            timerBonus4.Stop();
+            tetris.Bonus = -1;
+
         }
 
        

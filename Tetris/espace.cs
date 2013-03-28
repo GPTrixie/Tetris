@@ -105,6 +105,18 @@ namespace Tetris
             this.pieceEnCour = pieceEnCour;
         }
         /**
+*  <summary> Méthode qui définie la case à une position avec  une valeur en couleur à la valeur voulue.
+*  </summary>
+  * <param name=i>parametre qui correspont à la coordonnée verticale sur le tableau </param>
+ * <param name=j>parametre qui correspont à la coordonnée horizontale sur le tableau  </param>
+         *  * <param name=valeur>parametre qui correspont à la valeur que l'on veut attribuer à la case </param>
+* */
+        public void setCase(int i,int j,int valeur)
+        {
+            tableau[i][j].Pleine=valeur;
+            tableau[i][j].Color = valeur;
+        }
+        /**
      *  <summary> Méthode qui définie la piece en cours.
      *  </summary>
      * <returns>Renvoie un type piece corespondant à la piece en cour dans l'espace</returns>
@@ -332,6 +344,10 @@ namespace Tetris
 
                 if( pieceEnCour.getCentre().Y >largeur -4)
                   return 0;
+                if (pieceEnCour.Type == 2 && pieceEnCour.getCentre().Y < 0)
+                    return 0;
+                if (pieceEnCour.getCentre().Y < -1)
+                    return 0;
 
             piece tempPiece =new piece(pieceEnCour.getCentre().X,pieceEnCour.getCentre().Y,pieceEnCour.Type);
             @case[][] temp2 = pieceEnCour.getTableau();
@@ -381,7 +397,12 @@ namespace Tetris
             pieceEnCour.rotationPiece(sens);
            this.placerPiece();
         }
-
+        /**
+          *  <summary> Méthode qui va tester si une ligne est complète
+          *  </summary>
+        *    <param name=x>parametre qui correspont au numéro de ligne à tester</param>
+         *   <returns>Renvoie un boolean: vrai si la ligne est complète autrement renvoie faux</returns>
+              * */
         public Boolean testFinligne(int x)
         {
             for (int j = 0; j < largeur; j++)
@@ -393,6 +414,12 @@ namespace Tetris
             }
             return true;
         }
+        /**
+          *  <summary> Méthode qui va tester si une ligne est vide
+          *  </summary>
+        *    <param name=x>parametre qui correspont au numéro de ligne à tester</param>
+         *   <returns>Renvoie un boolean: vrai si la ligne est vide autrement renvoie faux</returns>
+              * */
         public Boolean testLigneVide(int x)
         {
             for (int j = 0; j < largeur; j++)
@@ -404,10 +431,15 @@ namespace Tetris
             }
             return true;
         }
+        /**
+        *  <summary> Méthode qui va descendre les pièces quand une ligne sera complété à partie de la ligne complété.
+        *  </summary>
+      *    <param name=ligne>parametre qui correspont au numéro de ligne qui est complète</param>
+            * */
         public void descendrePiece(int ligne)
         {
             int j = ligne;
-            while (testLigneVide(j) == false &&  j >-1)
+            while (j >-1 && testLigneVide(j) == false  )
             {
                 for (int i = 0; i < largeur; i++)
                 {
@@ -422,7 +454,11 @@ namespace Tetris
                 tableau[j][i].Pleine = 0;
             }
         }
-
+        /**
+          *  <summary> Méthode qui va tester si la partie est finie.
+          *  </summary>
+         *   <returns>Renvoie un entier : 1 si la partie est finie autrement renvoie 0.</returns>
+              * */
         public int testFinJeux()
         {
 
@@ -438,6 +474,42 @@ namespace Tetris
                 }
             }
             return 0;
+        }
+        /**
+        *  <summary> Méthode qui va rajouter une ligne vide avec une seule case pleine en bas de l'éspace.
+        *  </summary>
+      *    <param name=nbrCase>parametre qui correspont au numéro de la case à remplire</param>
+            * */
+        public void ajoutLigne(int nbrCase)
+        {
+            int j = 4;
+            while (testLigneVide(j) == true && j < hauteur)
+            {
+                
+                j++;
+            }
+            for (int k = j-1; k < hauteur - 1; k++)
+            {
+                for (int i = 0; i < largeur; i++)
+                {
+                    tableau[k][i].Pleine = tableau[k + 1][i].Pleine;
+                    tableau[k][i].Color = tableau[k + 1][i].Color;
+                }
+            }
+            for (int t = 0; t < largeur; t++)
+            {
+                if (t != nbrCase)
+                {
+                    tableau[hauteur - 1][t].Pleine = 0;
+                    tableau[hauteur - 1][t].Color = 0;
+                }
+                else
+                {
+                    tableau[hauteur - 1][t].Pleine = 1;
+                    tableau[hauteur - 1][t].Color =1;
+
+                }
+            }
         }
     }
 

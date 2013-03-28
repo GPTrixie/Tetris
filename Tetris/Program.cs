@@ -5,9 +5,11 @@ using System.Windows.Forms;
 
 namespace Tetris
 {
+    
     /// <summary>
     /// La classe programme est la première classe lancé dans le logiciel qui gère les forms au démarache .
     /// </summary>
+    /// <@author> Lucas</@author>
     static class Program
     {
         /// <summary>

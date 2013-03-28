@@ -65,16 +65,31 @@ namespace Tetris
             get{return pleine;}
             set{this.pleine = value;}
         }
+        /**
+    *  <summary> Cela permettera a acceder à la couleur de la case.
+    *  </summary>
+    * 
+    * */
         public int Color
         {
             get { return color; }
             set { this.color = value; }
         }
+        /**
+    *  <summary> La variable x définie les coordonnées selon la hauteur
+    *  </summary>
+    * 
+    * */
         public int X 
         {
             get { return x; }
             set { this.x = value; }
         }
+        /**
+     *  <summary> La variable y définie les coordonnées selon la largeur
+     *  </summary>
+     * 
+     * */
         public int Y
         {
             get { return y; }
